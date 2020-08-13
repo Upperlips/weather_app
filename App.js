@@ -34,6 +34,7 @@ function getTimeIx(weatherList) {
     }
   }
   timeIx = timeIx >= 0 && timeIx < 40 ? timeIx : 0;
+
   return timeIx;
 }
 
@@ -45,6 +46,39 @@ function parseTimeObj(obj) {
   obj.hour = time.slice(11, 13);
 }
 
+function setForecastArray(arr, data) {
+  //dt_txt: 2020-08-11 15:00:00
+  const list = data.list;
+  let currentDate;
+
+  for (let i = 0; i < list.length; i++) {
+    arr[i] = new Object();
+    arr[i].time = list[i].dt_txt.slice(11, 13);
+    if (arr[i].time === "00") {
+      arr[i].time = "자정";
+    } else {
+      arr[i].time += "시";
+    }
+
+    if (i === 0 || arr[i].time === "자정") {
+      arr[i].date = list[i].dt_txt.slice(5, 10); //08-13
+      let mon =
+        arr[i].date[0] === "0"
+          ? arr[i].date.slice(1, 2)
+          : arr[i].date.slice(0, 2);
+      let dt =
+        arr[i].date[3] === "0"
+          ? arr[i].date.slice(4, 5)
+          : arr[i].date.slice(3, 5);
+      arr[i].date = mon + "월 " + dt + "일";
+    } else {
+      arr[i].date = "";
+    }
+    arr[i].temp = Math.round(list[i].main.temp) + "º";
+    arr[i].condition = list[i].weather[0].main;
+  }
+}
+
 export default class extends React.Component {
   state = {
     isLoading: true,
@@ -54,16 +88,20 @@ export default class extends React.Component {
     const { data } = await axios.get(
       `https://api.openweathermap.org/data/2.5/forecast?lat=${latitude}&lon=${longitude}&appid=${API_KEY}&units=metric`
     );
-    console.log(data);
 
     let currentIx = getTimeIx(data.list);
+    data.list.splice(0, currentIx);
+
+    let forecast = new Array();
+    setForecastArray(forecast, data);
 
     this.setState({
       isLoading: false,
       locationName: data.city.name,
-      condition: data.list[currentIx].weather[0].main,
-      description: data.list[currentIx].weather[0].description,
-      temp: data.list[currentIx].main.temp,
+      condition: data.list[0].weather[0].main,
+      description: data.list[0].weather[0].description,
+      temp: data.list[0].main.temp,
+      forecast: forecast,
     });
   };
 
@@ -90,6 +128,7 @@ export default class extends React.Component {
       temp,
       condition,
       description,
+      forecast,
     } = this.state;
     return isLoading ? (
       <Loading />
@@ -99,6 +138,7 @@ export default class extends React.Component {
         temp={Math.round(temp)}
         condition={condition}
         description={description}
+        forecast={forecast}
       />
     );
   }

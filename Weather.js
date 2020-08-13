@@ -1,9 +1,10 @@
 import React from "react";
 import { View, Text, StyleSheet, StatusBar, ScrollView } from "react-native";
-import PropTypes from "prop-types";
+import PropTypes, { element } from "prop-types";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
 import Clock from "./Clock";
+import Forecast from "./Forecast";
 
 const LOCA_NAME_MAX = 16;
 
@@ -70,16 +71,30 @@ const weatherOptions = {
   },
 };
 
+function convertConditionIcon(forecast){
+  forecast.forEach(element => {
+    element.condition = <MaterialCommunityIcons
+            name={weatherOptions[element.condition].iconName}
+            size={25}
+            color="white"
+          />
+  });
+}
+
 export default function Weather({
   locationName,
   temp,
   condition,
   description,
+  forecast,
 }) {
   if (locationName.length > LOCA_NAME_MAX) {
     locationName = locationName.slice(0, LOCA_NAME_MAX - 1);
     locationName += "...";
-  } 
+  }
+  console.log(forecast);
+
+  convertConditionIcon(forecast);
 
   return (
     <LinearGradient
@@ -112,11 +127,12 @@ export default function Weather({
             horizontal={true}
             showsHorizontalScrollIndicator={false}
             contentContainerStyle={{
-            alignItems: 'center',
-            paddingStart: 5,
-            paddingEnd: 5
-          }}>
-            {/* put a forecast weather list here. */}
+              alignItems: "center",
+              paddingStart: 5,
+              paddingEnd: 5,
+            }}
+          >
+            <Forecast forecast={forecast}/>
           </ScrollView>
         </View>
         <View style={layout.halfBottom__halfBottom}>
@@ -164,10 +180,10 @@ const layout = StyleSheet.create({
     alignItems: "center",
   },
   halfBottom__halfTop: {
-    flex: 1,
+    flex: 2,
   },
   halfBottom__halfBottom: {
-    flex: 1,
+    flex: 3,
     justifyContent: "center",
     alignItems: "center",
   },
@@ -192,9 +208,9 @@ const text = StyleSheet.create({
     fontWeight: "600",
   },
   temp: {
+    color: "white",
     paddingLeft: 20,
     fontSize: 42,
-    color: "white",
   },
 });
 
