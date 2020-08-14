@@ -19,11 +19,11 @@ const weatherOptions = {
   },
   Rain: {
     iconName: "weather-pouring",
-    gradient: ["#2b5876", "#4e4376"],
+    gradient: ["#0575E6", "#ACB6E5"],
   },
   Snow: {
     iconName: "weather-snowy-heavy",
-    gradient: ["#abbaab", "#ffffff"],
+    gradient: ["#E2E2E2", "#E29587"],
   },
   Mist: {
     iconName: "weather-fog",
@@ -31,53 +31,55 @@ const weatherOptions = {
   },
   Smoke: {
     iconName: "weather-fog",
-    gradient: ["#bdc3c7", "#2c3e50"],
+    gradient: ["#20002c", "#cbb4d4"],
   },
   Haze: {
     iconName: "weather-fog",
-    gradient: ["#bdc3c7", "#2c3e50"],
+    gradient: ["#808080", "#F3904F"],
   },
   Dust: {
     iconName: "weather-fog",
-    gradient: ["#bdc3c7", "#2c3e50"],
+    gradient: ["#2C3E50", "#F56217"],
   },
   Fog: {
     iconName: "weather-fog",
-    gradient: ["#bdc3c7", "#2c3e50"],
+    gradient: ["#bec3c7", "#928DAB"],
   },
   Sand: {
     iconName: "weather-fog",
-    gradient: ["#bdc3c7", "#2c3e50"],
+    gradient: ["#FFC371", "#2c3e50"],
   },
   Ash: {
     iconName: "weather-fog",
-    gradient: ["#bdc3c7", "#2c3e50"],
+    gradient: ["#ff4b1f", "#2c3e50"],
   },
   Squall: {
     iconName: "weather-windy-variant",
-    gradient: ["#485563", "#29323c"],
+    gradient: ["#4B79A1", "#283E51"],
   },
   Tornado: {
     iconName: "weather-tornado",
-    gradient: ["#870000", "#190A05"],
+    gradient: ["#283E51", "#190A05"],
   },
   Clear: {
     iconName: "weather-sunny",
-    gradient: ["#2980B9", "#6DD5FA", "#FFFFFF"],
+    gradient: ["#00C9FF", "#64b3f4", "#4BC0C8"],
   },
   Clouds: {
     iconName: "weather-cloudy",
-    gradient: ["#232526", "#414345"],
+    gradient: ["#355C7D", "#6C5B7B", "#C06C84"],
   },
 };
 
-function convertConditionIcon(forecast){
-  forecast.forEach(element => {
-    element.condition = <MaterialCommunityIcons
-            name={weatherOptions[element.condition].iconName}
-            size={25}
-            color="white"
-          />
+function convertConditionIcon(forecast) {
+  forecast.forEach((element) => {
+    element.condition = (
+      <MaterialCommunityIcons
+        name={weatherOptions[element.condition].iconName}
+        size={20}
+        color="white"
+      />
+    );
   });
 }
 
@@ -92,9 +94,27 @@ export default function Weather({
     locationName = locationName.slice(0, LOCA_NAME_MAX - 1);
     locationName += "...";
   }
-  console.log(forecast);
 
   convertConditionIcon(forecast);
+  /*
+  forChangeBackground image :)
+  const weatherCondition = ["Thunderstorm",
+    "Drizzle",
+    "Rain",
+    "Snow",
+    "Mist",
+    "Smoke",
+    "Haze",
+    "Dust",
+    "Fog",
+    "Sand",
+    "Ash",
+    "Squall",
+    "Tornado",
+    "Clear",
+    "Clouds"]
+  condition = weatherCondition[14];
+  */
 
   return (
     <LinearGradient
@@ -128,11 +148,11 @@ export default function Weather({
             showsHorizontalScrollIndicator={false}
             contentContainerStyle={{
               alignItems: "center",
-              paddingStart: 5,
+              paddingStart: 15,
               paddingEnd: 5,
             }}
           >
-            <Forecast forecast={forecast}/>
+            <Forecast forecast={forecast} />
           </ScrollView>
         </View>
         <View style={layout.halfBottom__halfBottom}>
@@ -172,18 +192,18 @@ const layout = StyleSheet.create({
     alignItems: "flex-start",
   },
   halfTop: {
-    flex: 46,
+    flex: 42,
   },
   halfBottom: {
-    flex: 46,
+    flex: 50,
     justifyContent: "center",
     alignItems: "center",
   },
   halfBottom__halfTop: {
-    flex: 2,
+    flex: 1,
   },
   halfBottom__halfBottom: {
-    flex: 3,
+    flex: 2,
     justifyContent: "center",
     alignItems: "center",
   },

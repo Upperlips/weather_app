@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "weather_app",
+    "name": "감성날씨",
     "slug": "weather_app",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -17,7 +17,7 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "bundleIdentifier": "com.upperlips.gamsungweather"
     },
     "web": {
       "favicon": "./assets/favicon.png"
