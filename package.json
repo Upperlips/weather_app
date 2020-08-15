@@ -9,6 +9,8 @@
   },
   "dependencies": {
     "axios": "^0.19.2",
+    "cross-env": "^7.0.2",
+    "dotenv": "^8.2.0",
     "expo": "~38.0.8",
     "expo-linear-gradient": "~8.2.1",
     "expo-location": "~8.2.1",

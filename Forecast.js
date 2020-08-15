@@ -9,10 +9,10 @@ export default function Forecast({ forecast }) {
       <View style={layout.forecast__box__date}>
         <Text style={text.forecast__date}>{component.date}</Text>
       </View>
-      <View style={layout.forecast__box}>
+      <View style={layout.forecast__box__time}>
         <Text style={text.forecast__time}>{component.time}</Text>
       </View>
-      <View style={layout.forecast__box}>
+      <View style={layout.forecast__box__temp}>
         <Text style={text.forecast__temp}>
           {component.condition} {component.temp}
         </Text>
@@ -32,9 +32,12 @@ const layout = StyleSheet.create({
     margin: 10,
     justifyContent: "flex-end",
   },
-  forecast__box: {},
   forecast__box__date: {
-    paddingBottom: 7,
+    paddingBottom: 5,
+  },
+  forecast__box__time: {
+    height: 30,
+    justifyContent: "flex-end",
   },
 });
 

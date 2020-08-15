@@ -21,29 +21,48 @@ function getTimeIx(weatherList) {
     cmpTime = { time: weatherList[i].dt_txt, month: "", date: "", hour: "" };
     parseTimeObj(cmpTime);
 
-    if (cmpTime.month > cMonth) {
-      timeIx--;
-      break;
-    } else if (cmpTime.date > cDate) {
-      timeIx--;
-      break;
-    } else if (cmpTime.hour > cHour) {
-      timeIx--;
-      break;
-    } else {
+    console.log(
+      cmpTime.month +
+        " " +
+        cmpTime.date +
+        " " +
+        cmpTime.hour +
+        " " +
+        typeof cmpTime.date
+    );
+    console.log(cMonth + " " + cDate + " " + cHour + " " + typeof cMonth);
+
+    if (cMonth > cmpTime.month) {
       timeIx++;
+    } else if (cMonth === cmpTime.month) {
+      if (cDate > cmpTime.date) {
+        timeIx++;
+      } else if (cDate === cmpTime.date) {
+        if (cHour > cmpTime.hour || cHour === cmpTime.hour) {
+          timeIx++;
+        } else {
+          timeIx--;
+          break;
+        }
+      } else {
+        timeIx--;
+        break;
+      }
+    } else {
+      timeIx--;
+      break;
     }
   }
-  timeIx = timeIx >= 0 && timeIx < 40 ? timeIx : 0;
+  timeIx = timeIx >= 0 && timeIx < weatherList.length ? timeIx : 0;
 
   return timeIx;
 }
 
 function parseTimeObj(obj) {
   const time = obj.time; //YYYY-MM-DD HH:mm:ss
-  obj.month = time.slice(5, 7);
-  obj.date = time.slice(8, 10);
-  obj.hour = time.slice(11, 13);
+  obj.month = parseInt(time.slice(5, 7));
+  obj.date = parseInt(time.slice(8, 10));
+  obj.hour = parseInt(time.slice(11, 13));
 }
 
 function setForecastArray(arr, data) {
