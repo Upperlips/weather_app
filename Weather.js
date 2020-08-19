@@ -4,7 +4,8 @@ import PropTypes, { element } from "prop-types";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
 import Clock from "./Clock";
-import Forecast from "./Forecast";
+import HourlyForecast from "./HourlyForecast";
+import DailyForecast from "./DailyForecast";
 
 const LOCA_NAME_MAX = 16;
 
@@ -19,7 +20,7 @@ const weatherOptions = {
   },
   Rain: {
     iconName: "weather-pouring",
-    gradient: ["#0575E6", "#ACB6E5"],
+    gradient: ["#5FC3E4", "#348AC7", "#314755"],
   },
   Snow: {
     iconName: "weather-snowy-heavy",
@@ -59,24 +60,24 @@ const weatherOptions = {
   },
   Tornado: {
     iconName: "weather-tornado",
-    gradient: ["#283E51", "#190A05"],
+    gradient: ["#aa4b6b", "#190A05"],
   },
   Clear: {
     iconName: "weather-sunny",
-    gradient: ["#00C9FF", "#64b3f4", "#4BC0C8"],
+    gradient: ["#E0EAFC", "#64b3f4"],
   },
   Clouds: {
     iconName: "weather-cloudy",
-    gradient: ["#355C7D", "#6C5B7B", "#C06C84"],
+    gradient: ["#757F9A", "#1f4f72"],
   },
 };
 
-function convertConditionIcon(forecast) {
+function convertConditionIcon(forecast, size) {
   forecast.forEach((element) => {
-    element.condition = (
+    element.weather[0].icon = (
       <MaterialCommunityIcons
-        name={weatherOptions[element.condition].iconName}
-        size={20}
+        name={weatherOptions[element.weather[0].main].iconName}
+        size={size}
         color="white"
       />
     );
@@ -88,33 +89,16 @@ export default function Weather({
   temp,
   condition,
   description,
-  forecast,
+  h_forecast,
+  d_forecast,
 }) {
   if (locationName.length > LOCA_NAME_MAX) {
     locationName = locationName.slice(0, LOCA_NAME_MAX - 1);
     locationName += "...";
   }
 
-  convertConditionIcon(forecast);
-  /*
-  forChangeBackground image :)
-  const weatherCondition = ["Thunderstorm",
-    "Drizzle",
-    "Rain",
-    "Snow",
-    "Mist",
-    "Smoke",
-    "Haze",
-    "Dust",
-    "Fog",
-    "Sand",
-    "Ash",
-    "Squall",
-    "Tornado",
-    "Clear",
-    "Clouds"]
-  condition = weatherCondition[14];
-  */
+  convertConditionIcon(h_forecast, 25);
+  convertConditionIcon(d_forecast, 33);
 
   return (
     <LinearGradient
@@ -128,7 +112,7 @@ export default function Weather({
           <Text style={text.locationName}>{locationName}</Text>
         </View>
       </View>
-      <View style={layout.halfTop}>
+      <View style={layout.currentInfo}>
         <View style={layout.clockBox}>
           <Clock />
         </View>
@@ -141,8 +125,8 @@ export default function Weather({
           <Text style={text.temp}>{temp}º</Text>
         </View>
       </View>
-      <View style={layout.halfBottom}>
-        <View style={layout.halfBottom__halfTop}>
+      <View style={layout.forecastBox}>
+        <View style={layout.h_forecast_scroll}>
           <ScrollView
             horizontal={true}
             showsHorizontalScrollIndicator={false}
@@ -152,13 +136,24 @@ export default function Weather({
               paddingEnd: 5,
             }}
           >
-            <Forecast forecast={forecast} />
+            <HourlyForecast h_forecast={h_forecast} />
+          </ScrollView>
+          <ScrollView
+            horizontal={true}
+            showsHorizontalScrollIndicator={false}
+            contentContainerStyle={{
+              alignItems: "center",
+              paddingStart: 15,
+              paddingEnd: 5,
+            }}
+          >
+            <DailyForecast d_forecast={d_forecast} />
           </ScrollView>
         </View>
-        <View style={layout.halfBottom__halfBottom}>
-          <Text style={text.title}>{condition}</Text>
-          <Text style={text.subtitle}>{description}</Text>
-        </View>
+      </View>
+      <View style={layout.currentWeatherBox}>
+        <Text style={text.title}>{condition}</Text>
+        <Text style={text.subtitle}>{description}</Text>
       </View>
     </LinearGradient>
   );
@@ -181,7 +176,7 @@ const layout = StyleSheet.create({
     alignItems: "flex-end",
   },
   clockBox: {
-    flex: 1,
+    flex: 2,
     justifyContent: "flex-end",
     alignItems: "center",
   },
@@ -191,19 +186,19 @@ const layout = StyleSheet.create({
     justifyContent: "center",
     alignItems: "flex-start",
   },
-  halfTop: {
+  currentInfo: {
     flex: 42,
   },
-  halfBottom: {
+  forecastBox: {
     flex: 50,
     justifyContent: "center",
     alignItems: "center",
   },
-  halfBottom__halfTop: {
+  h_forecast_scroll: {
     flex: 1,
   },
-  halfBottom__halfBottom: {
-    flex: 2,
+  currentWeatherBox: {
+    flex: 30,
     justifyContent: "center",
     alignItems: "center",
   },
@@ -254,3 +249,23 @@ Weather.propTypes = {
     "Clouds",
   ]).isRequired,
 };
+
+/*
+  forChangeBackground image :)
+  const weatherCondition = ["Thunderstorm",
+    "Drizzle",
+    "Rain",
+    "Snow",
+    "Mist",
+    "Smoke",
+    "Haze",
+    "Dust",
+    "Fog",
+    "Sand",
+    "Ash",
+    "Squall",
+    "Tornado",
+    "Clear",
+    "Clouds"]
+  condition = weatherCondition[14];
+  */

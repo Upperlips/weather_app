@@ -1,6 +1,6 @@
-import React, { Component } from 'react';
-import { Text, View, StyleSheet } from 'react-native';
-import moment from 'moment';
+import React, { Component } from "react";
+import { Text, View, StyleSheet } from "react-native";
+import moment from "moment";
 
 const TIME_DURATION = 60000;
 
@@ -9,20 +9,18 @@ export default class Clock extends Component {
     super(props);
     this.state = {
       //defauilt value of the time
-      time: '00:00',
+      time: "00:00",
     };
   }
   componentDidMount() {
-    this.setState({time : moment().format('HH:mm')});
-
-    setInterval(() => { 
-      this.setState({ 
-      time : moment().format('HH:mm')
-      }) 
-     },TIME_DURATION); 
+    this.setState({ time: moment().format("HH:mm") });
   }
-
   render() {
+    setInterval(() => {
+      this.setState({
+        time: moment().format("HH:mm"),
+      });
+    }, TIME_DURATION);
     return (
       <View style={layout.clockBox}>
         <Text style={text.clock}>{this.state.time}</Text>
@@ -32,22 +30,20 @@ export default class Clock extends Component {
 }
 
 const layout = StyleSheet.create({
-  clockBox : {
+  clockBox: {
     marginBottom: 7,
     borderWidth: 1.8,
-    borderColor: 'white',
+    borderColor: "white",
     padding: 7,
     paddingLeft: 10,
     paddingRight: 10,
     borderRadius: 15,
-
   },
-})
+});
 
 const text = StyleSheet.create({
-  clock : {
+  clock: {
     fontSize: 55,
     color: "white",
   },
-})
-
+});
